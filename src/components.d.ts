@@ -6,63 +6,140 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface MyComponent {
+    /**
+     * Een rondleiding die stap voor stap uitlegt wat er op een pagina staat.
+     * Zet de stappen als `guided-tour-step` in het component en start de rondleiding met `start()`.
+     */
+    interface GuidedTour {
         /**
-          * The first name
+          * Sluit de rondleiding
          */
-        "first"?: string;
+        "end": () => Promise<void>;
         /**
-          * The last name
+          * Start de rondleiding, bij de eerste stap of bij de stap die je meegeeft
          */
-        "last"?: string;
+        "start": (step?: number) => Promise<void>;
+    }
+    /**
+     * Eén stap van een `guided-tour`. De inhoud van het element is de tekst van de stap.
+     */
+    interface GuidedTourStep {
         /**
-          * The middle name
+          * Zet `guided-tour` op de stap die in beeld is
+          * @default false
          */
-        "middle"?: string;
+        "active": boolean;
+        /**
+          * Kop van de stap
+         */
+        "heading": string;
+        /**
+          * CSS-selector van het element waar de stap naar wijst. Zonder target staat de stap midden in beeld.
+         */
+        "target"?: string;
     }
 }
+export interface GuidedTourCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLGuidedTourElement;
+}
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLGuidedTourElementEventMap {
+        "tourStep": number;
+        "tourEnd": boolean;
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    /**
+     * Een rondleiding die stap voor stap uitlegt wat er op een pagina staat.
+     * Zet de stappen als `guided-tour-step` in het component en start de rondleiding met `start()`.
+     */
+    interface HTMLGuidedTourElement extends Components.GuidedTour, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLGuidedTourElementEventMap>(type: K, listener: (this: HTMLGuidedTourElement, ev: GuidedTourCustomEvent<HTMLGuidedTourElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLGuidedTourElementEventMap>(type: K, listener: (this: HTMLGuidedTourElement, ev: GuidedTourCustomEvent<HTMLGuidedTourElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLGuidedTourElement: {
+        prototype: HTMLGuidedTourElement;
+        new (): HTMLGuidedTourElement;
+    };
+    /**
+     * Eén stap van een `guided-tour`. De inhoud van het element is de tekst van de stap.
+     */
+    interface HTMLGuidedTourStepElement extends Components.GuidedTourStep, HTMLStencilElement {
+    }
+    var HTMLGuidedTourStepElement: {
+        prototype: HTMLGuidedTourStepElement;
+        new (): HTMLGuidedTourStepElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "guided-tour": HTMLGuidedTourElement;
+        "guided-tour-step": HTMLGuidedTourStepElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
+    type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K]?: never };
+
+    /**
+     * Een rondleiding die stap voor stap uitlegt wat er op een pagina staat.
+     * Zet de stappen als `guided-tour-step` in het component en start de rondleiding met `start()`.
+     */
+    interface GuidedTour {
         /**
-          * The first name
+          * Gaat af als de rondleiding sluit: `true` als hij is afgemaakt, `false` als hij eerder is gesloten
          */
-        "first"?: string;
+        "onTourEnd"?: (event: GuidedTourCustomEvent<boolean>) => void;
         /**
-          * The last name
+          * Gaat af als er een stap in beeld komt, met het nummer van de stap (vanaf 0)
          */
-        "last"?: string;
+        "onTourStep"?: (event: GuidedTourCustomEvent<number>) => void;
+    }
+    /**
+     * Eén stap van een `guided-tour`. De inhoud van het element is de tekst van de stap.
+     */
+    interface GuidedTourStep {
         /**
-          * The middle name
+          * Zet `guided-tour` op de stap die in beeld is
+          * @default false
          */
-        "middle"?: string;
+        "active"?: boolean;
+        /**
+          * Kop van de stap
+         */
+        "heading": string;
+        /**
+          * CSS-selector van het element waar de stap naar wijst. Zonder target staat de stap midden in beeld.
+         */
+        "target"?: string;
     }
 
-    interface MyComponentAttributes {
-        "first": string;
-        "middle": string;
-        "last": string;
+    interface GuidedTourStepAttributes {
+        "heading": string;
+        "target": string;
+        "active": boolean;
     }
 
     interface IntrinsicElements {
-        "my-component": Omit<MyComponent, keyof MyComponentAttributes> & { [K in keyof MyComponent & keyof MyComponentAttributes]?: MyComponent[K] } & { [K in keyof MyComponent & keyof MyComponentAttributes as `attr:${K}`]?: MyComponentAttributes[K] } & { [K in keyof MyComponent & keyof MyComponentAttributes as `prop:${K}`]?: MyComponent[K] };
+        "guided-tour": GuidedTour;
+        "guided-tour-step": Omit<GuidedTourStep, keyof GuidedTourStepAttributes> & { [K in keyof GuidedTourStep & keyof GuidedTourStepAttributes]?: GuidedTourStep[K] } & { [K in keyof GuidedTourStep & keyof GuidedTourStepAttributes as `attr:${K}`]?: GuidedTourStepAttributes[K] } & { [K in keyof GuidedTourStep & keyof GuidedTourStepAttributes as `prop:${K}`]?: GuidedTourStep[K] } & OneOf<"heading", GuidedTourStep["heading"], GuidedTourStepAttributes["heading"]>;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.IntrinsicElements["my-component"] & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            /**
+             * Een rondleiding die stap voor stap uitlegt wat er op een pagina staat.
+             * Zet de stappen als `guided-tour-step` in het component en start de rondleiding met `start()`.
+             */
+            "guided-tour": LocalJSX.IntrinsicElements["guided-tour"] & JSXBase.HTMLAttributes<HTMLGuidedTourElement>;
+            /**
+             * Eén stap van een `guided-tour`. De inhoud van het element is de tekst van de stap.
+             */
+            "guided-tour-step": LocalJSX.IntrinsicElements["guided-tour-step"] & JSXBase.HTMLAttributes<HTMLGuidedTourStepElement>;
         }
     }
 }

@@ -1,5 +1,5 @@
-import { defineVitestConfig } from '@stencil/vitest/config';
-import { playwright } from '@vitest/browser-playwright';
+import { defineVitestConfig } from '@stencil/vitest/config'
+import { playwright } from '@vitest/browser-playwright'
 
 export default defineVitestConfig({
   stencilConfig: './stencil.config.ts',
@@ -10,8 +10,8 @@ export default defineVitestConfig({
         test: {
           name: 'unit',
           include: ['src/**/*.unit.test.{ts,tsx}'],
-          environment: 'stencil',
-        },
+          environment: 'stencil'
+        }
       },
       // Component browser tests - real browser via Playwright
       {
@@ -23,10 +23,10 @@ export default defineVitestConfig({
             enabled: true,
             provider: playwright(),
             headless: true,
-            instances: [{ browser: 'chromium' }],
-          },
-        },
-      },
-    ],
-  },
-});
+            instances: [{ browser: 'chromium' }]
+          }
+        }
+      }
+    ]
+  }
+})
