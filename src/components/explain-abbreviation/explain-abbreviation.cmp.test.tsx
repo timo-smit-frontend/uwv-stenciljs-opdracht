@@ -162,6 +162,23 @@ describe('explain-abbreviation', () => {
     expect(again.wia.term).not.toHaveAttribute('seen')
   })
 
+  it('telt een afkorting overal als bekeken als hij vaker op de pagina staat', async () => {
+    const { root, waitForChanges } = await render(
+      <div>
+        <explain-abbreviation stands-for="Werkloosheidswet">WW</explain-abbreviation>
+        <explain-abbreviation stands-for="Werkloosheidswet">WW</explain-abbreviation>
+      </div>
+    )
+    await waitForChanges()
+
+    const [first, second] = Array.from(root.querySelectorAll('explain-abbreviation'))
+    await userEvent.click(first.shadowRoot!.querySelector('button')!)
+    await waitForChanges()
+
+    expect(first).toHaveAttribute('seen')
+    expect(second).toHaveAttribute('seen')
+  })
+
   it('vergeet wat je een eerdere dag hebt bekeken', async () => {
     const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toDateString()
     sessionStorage.setItem('explain-abbreviation:WW', yesterday)
