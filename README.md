@@ -2,6 +2,8 @@
 
 Uitleg bij een afkorting, als webcomponent. Klik op de afkorting en er verschijnt een korte uitleg onder. Je kunt het op bijna elke pagina gebruiken, ook om een vakterm heen.
 
+**Bekijk de demo:** [timo-smit-frontend.github.io/uwv-stenciljs-opdracht](https://timo-smit-frontend.github.io/uwv-stenciljs-opdracht/)
+
 ## Waarom dit component
 
 Voor deze opdracht heb ik me natuurlijk verdiept in UWV. Wat me opviel: jullie houden ontzettend van afkortingen. WW, WIA, WGA, IVA, en dat is nog maar het begin.
