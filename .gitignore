@@ -13,6 +13,8 @@ log.txt
 *.sublime-workspace
 
 .stencil/
+.vitest-attachments/
+__screenshots__/
 .idea/
 .vscode/
 .sass-cache/

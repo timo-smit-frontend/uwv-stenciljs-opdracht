@@ -1,9 +1,11 @@
 :host {
   display: inline;
+  white-space: nowrap;
 }
 
 button {
   display: inline;
+  white-space: normal;
   margin: 0 -0.125em;
   padding: 0 0.125em;
   border: 0;

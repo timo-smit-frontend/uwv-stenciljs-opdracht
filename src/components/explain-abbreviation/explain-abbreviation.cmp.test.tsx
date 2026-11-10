@@ -94,6 +94,26 @@ describe('explain-abbreviation', () => {
     expect(isOpen(wia.bubble)).toBe(true)
   })
 
+  it('zet een leesteken nooit los op de volgende regel', async () => {
+    const { root, waitForChanges } = await render(
+      <p>
+        Ik werkte als <explain-abbreviation stands-for="User interface">UI</explain-abbreviation>-designer.
+      </p>
+    )
+    await waitForChanges()
+
+    const term = root.querySelector('explain-abbreviation')!
+    const button = term.shadowRoot!.querySelector('button')!
+    const hyphen = document.createRange()
+    hyphen.setStart(term.nextSibling!, 0)
+    hyphen.setEnd(term.nextSibling!, 1)
+
+    for (let width = 60; width <= 300; width += 2) {
+      root.style.width = `${width}px`
+      expect(hyphen.getBoundingClientRect().top).toBeLessThan(button.getBoundingClientRect().bottom)
+    }
+  })
+
   it('staat al in het eerste frame op zijn plek', async () => {
     const { ww } = await renderTerms()
 

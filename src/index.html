@@ -24,6 +24,7 @@
       }
 
       :root {
+        --pad: clamp(1.25rem, 7vw, 6rem);
         --white: #fff;
         --stone-50: #fafaf9;
         --stone-100: #f5f5f4;
@@ -73,7 +74,7 @@
       }
 
       .card {
-        padding: clamp(1.75rem, 7vw, 6rem);
+        padding: var(--pad);
         border-radius: 1.5rem;
       }
 
@@ -270,11 +271,11 @@
         align-items: center;
         min-height: 2.75rem;
         box-sizing: border-box;
-        padding: 0 1.25rem;
+        padding: 0 1rem;
         border-radius: 999px;
         background: var(--stone-900);
         color: var(--stone-50);
-        font-size: 0.9375rem;
+        font-size: 0.875rem;
         font-weight: 500;
         text-decoration: none;
         transition: background-color 0.2s;
@@ -372,7 +373,8 @@
 
       .pip {
         display: flex;
-        gap: 1rem;
+        flex-wrap: wrap;
+        gap: 0.75rem 1rem;
         align-items: center;
       }
 
@@ -384,15 +386,29 @@
         box-shadow: 0 0 0 2px rgb(255 255 255 / 0.2);
       }
 
-      @media (min-width: 48rem) {
-        .rows li {
-          grid-template-columns: 3rem 12rem 1fr;
-          gap: 2rem;
-          padding: 1.75rem 2rem;
+      .pip p {
+        flex: 1 1 12rem;
+      }
+
+      @media (min-width: 40rem) {
+        .button {
+          padding: 0 1.25rem;
+          font-size: 0.9375rem;
         }
 
-        .rows li > :last-child {
-          grid-column: auto;
+        .hero {
+          grid-template-columns: 1fr 14rem;
+        }
+
+        .hero img {
+          order: 0;
+          width: 100%;
+        }
+
+        .rows li {
+          grid-template-columns: 2.5rem 1fr;
+          gap: 0.5rem 1.25rem;
+          padding: 1.5rem 1.75rem;
         }
       }
 
@@ -402,13 +418,24 @@
           gap: 5rem;
         }
 
-        .hero img {
-          order: 0;
-          width: 100%;
+        .rows li {
+          grid-template-columns: 3rem 12rem 1fr;
+          gap: 2rem;
+          padding: 1.75rem 2rem;
         }
 
+        .rows li > :last-child {
+          grid-column: auto;
+        }
+
+        .stacked {
+          gap: 3.5rem;
+        }
+      }
+
+      @media (min-width: 64rem) {
         .section:not(.stacked) {
-          grid-template-columns: minmax(16rem, 1fr) 2fr;
+          grid-template-columns: minmax(18rem, 1fr) 1.6fr;
         }
 
         .section:not(.stacked) > header {
@@ -417,22 +444,22 @@
           align-self: start;
         }
 
-        .stacked {
-          gap: 3.5rem;
+        .section h2 {
+          font-size: clamp(2rem, 4vw, 3.5rem);
         }
       }
 
       footer {
         max-width: 80rem;
-        box-sizing: border-box;
         margin: 0 auto;
-        padding: 2rem clamp(2.25rem, 7vw, 6.5rem) 7rem;
+        padding: 2rem 0.5rem 7rem;
         color: var(--stone-300);
         font-size: 1rem;
       }
 
       footer p {
         margin: 0;
+        padding-inline: var(--pad);
       }
 
       code {
