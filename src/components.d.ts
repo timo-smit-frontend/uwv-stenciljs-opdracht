@@ -6,140 +6,73 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    /**
-     * Een rondleiding die stap voor stap uitlegt wat er op een pagina staat.
-     * Zet de stappen als `guided-tour-step` in het component en start de rondleiding met `start()`.
-     */
-    interface GuidedTour {
+    interface ExplainAbbreviation {
+        "definition"?: string;
+        "href"?: string;
         /**
-          * Sluit de rondleiding
-         */
-        "end": () => Promise<void>;
-        /**
-          * Start de rondleiding, bij de eerste stap of bij de stap die je meegeeft
-         */
-        "start": (step?: number) => Promise<void>;
-    }
-    /**
-     * Eén stap van een `guided-tour`. De inhoud van het element is de tekst van de stap.
-     */
-    interface GuidedTourStep {
-        /**
-          * Zet `guided-tour` op de stap die in beeld is
           * @default false
          */
-        "active": boolean;
-        /**
-          * Kop van de stap
-         */
-        "heading": string;
-        /**
-          * CSS-selector van het element waar de stap naar wijst. Zonder target staat de stap midden in beeld.
-         */
-        "target"?: string;
+        "seen": boolean;
+        "standsFor"?: string;
+        "standsForLang"?: string;
     }
 }
-export interface GuidedTourCustomEvent<T> extends CustomEvent<T> {
+export interface ExplainAbbreviationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLGuidedTourElement;
+    target: HTMLExplainAbbreviationElement;
 }
 declare global {
-    interface HTMLGuidedTourElementEventMap {
-        "tourStep": number;
-        "tourEnd": boolean;
+    interface HTMLExplainAbbreviationElementEventMap {
+        "abbreviationOpen": string;
     }
-    /**
-     * Een rondleiding die stap voor stap uitlegt wat er op een pagina staat.
-     * Zet de stappen als `guided-tour-step` in het component en start de rondleiding met `start()`.
-     */
-    interface HTMLGuidedTourElement extends Components.GuidedTour, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLGuidedTourElementEventMap>(type: K, listener: (this: HTMLGuidedTourElement, ev: GuidedTourCustomEvent<HTMLGuidedTourElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+    interface HTMLExplainAbbreviationElement extends Components.ExplainAbbreviation, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLExplainAbbreviationElementEventMap>(type: K, listener: (this: HTMLExplainAbbreviationElement, ev: ExplainAbbreviationCustomEvent<HTMLExplainAbbreviationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLGuidedTourElementEventMap>(type: K, listener: (this: HTMLGuidedTourElement, ev: GuidedTourCustomEvent<HTMLGuidedTourElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLExplainAbbreviationElementEventMap>(type: K, listener: (this: HTMLExplainAbbreviationElement, ev: ExplainAbbreviationCustomEvent<HTMLExplainAbbreviationElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
-    var HTMLGuidedTourElement: {
-        prototype: HTMLGuidedTourElement;
-        new (): HTMLGuidedTourElement;
-    };
-    /**
-     * Eén stap van een `guided-tour`. De inhoud van het element is de tekst van de stap.
-     */
-    interface HTMLGuidedTourStepElement extends Components.GuidedTourStep, HTMLStencilElement {
-    }
-    var HTMLGuidedTourStepElement: {
-        prototype: HTMLGuidedTourStepElement;
-        new (): HTMLGuidedTourStepElement;
+    var HTMLExplainAbbreviationElement: {
+        prototype: HTMLExplainAbbreviationElement;
+        new (): HTMLExplainAbbreviationElement;
     };
     interface HTMLElementTagNameMap {
-        "guided-tour": HTMLGuidedTourElement;
-        "guided-tour-step": HTMLGuidedTourStepElement;
+        "explain-abbreviation": HTMLExplainAbbreviationElement;
     }
 }
 declare namespace LocalJSX {
-    type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K]?: never };
-
-    /**
-     * Een rondleiding die stap voor stap uitlegt wat er op een pagina staat.
-     * Zet de stappen als `guided-tour-step` in het component en start de rondleiding met `start()`.
-     */
-    interface GuidedTour {
+    interface ExplainAbbreviation {
+        "definition"?: string;
+        "href"?: string;
+        "onAbbreviationOpen"?: (event: ExplainAbbreviationCustomEvent<string>) => void;
         /**
-          * Gaat af als de rondleiding sluit: `true` als hij is afgemaakt, `false` als hij eerder is gesloten
-         */
-        "onTourEnd"?: (event: GuidedTourCustomEvent<boolean>) => void;
-        /**
-          * Gaat af als er een stap in beeld komt, met het nummer van de stap (vanaf 0)
-         */
-        "onTourStep"?: (event: GuidedTourCustomEvent<number>) => void;
-    }
-    /**
-     * Eén stap van een `guided-tour`. De inhoud van het element is de tekst van de stap.
-     */
-    interface GuidedTourStep {
-        /**
-          * Zet `guided-tour` op de stap die in beeld is
           * @default false
          */
-        "active"?: boolean;
-        /**
-          * Kop van de stap
-         */
-        "heading": string;
-        /**
-          * CSS-selector van het element waar de stap naar wijst. Zonder target staat de stap midden in beeld.
-         */
-        "target"?: string;
+        "seen"?: boolean;
+        "standsFor"?: string;
+        "standsForLang"?: string;
     }
 
-    interface GuidedTourStepAttributes {
-        "heading": string;
-        "target": string;
-        "active": boolean;
+    interface ExplainAbbreviationAttributes {
+        "standsFor": string;
+        "standsForLang": string;
+        "definition": string;
+        "href": string;
+        "seen": boolean;
     }
 
     interface IntrinsicElements {
-        "guided-tour": GuidedTour;
-        "guided-tour-step": Omit<GuidedTourStep, keyof GuidedTourStepAttributes> & { [K in keyof GuidedTourStep & keyof GuidedTourStepAttributes]?: GuidedTourStep[K] } & { [K in keyof GuidedTourStep & keyof GuidedTourStepAttributes as `attr:${K}`]?: GuidedTourStepAttributes[K] } & { [K in keyof GuidedTourStep & keyof GuidedTourStepAttributes as `prop:${K}`]?: GuidedTourStep[K] } & OneOf<"heading", GuidedTourStep["heading"], GuidedTourStepAttributes["heading"]>;
+        "explain-abbreviation": Omit<ExplainAbbreviation, keyof ExplainAbbreviationAttributes> & { [K in keyof ExplainAbbreviation & keyof ExplainAbbreviationAttributes]?: ExplainAbbreviation[K] } & { [K in keyof ExplainAbbreviation & keyof ExplainAbbreviationAttributes as `attr:${K}`]?: ExplainAbbreviationAttributes[K] } & { [K in keyof ExplainAbbreviation & keyof ExplainAbbreviationAttributes as `prop:${K}`]?: ExplainAbbreviation[K] };
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            /**
-             * Een rondleiding die stap voor stap uitlegt wat er op een pagina staat.
-             * Zet de stappen als `guided-tour-step` in het component en start de rondleiding met `start()`.
-             */
-            "guided-tour": LocalJSX.IntrinsicElements["guided-tour"] & JSXBase.HTMLAttributes<HTMLGuidedTourElement>;
-            /**
-             * Eén stap van een `guided-tour`. De inhoud van het element is de tekst van de stap.
-             */
-            "guided-tour-step": LocalJSX.IntrinsicElements["guided-tour-step"] & JSXBase.HTMLAttributes<HTMLGuidedTourStepElement>;
+            "explain-abbreviation": LocalJSX.IntrinsicElements["explain-abbreviation"] & JSXBase.HTMLAttributes<HTMLExplainAbbreviationElement>;
         }
     }
 }

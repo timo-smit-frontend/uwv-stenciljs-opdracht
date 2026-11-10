@@ -3,198 +3,1028 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rondleiding door het beheer</title>
+    <meta
+      name="description"
+      content="Timo Smit, front-end developer, op een pagina vol afkortingen. De demo van het webcomponent explain-abbreviation."
+    />
+    <title>Timo Smit | Front-end developer</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="assets/fonts/outfit.woff2" as="font" type="font/woff2" crossorigin />
 
-    <script type="module" src="/build/guided-tour.esm.js"></script>
-    <script nomodule src="/build/guided-tour.js"></script>
+    <script type="module" src="build/explain-abbreviation.esm.js"></script>
+    <script nomodule src="build/explain-abbreviation.js"></script>
 
     <style>
+      @font-face {
+        font-family: 'Outfit';
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url('assets/fonts/outfit.woff2') format('woff2');
+      }
+
+      :root {
+        --white: #fff;
+        --stone-50: #fafaf9;
+        --stone-100: #f5f5f4;
+        --stone-200: #e7e5e4;
+        --stone-300: #d6d3d1;
+        --stone-400: #a8a29e;
+        --stone-500: #78716c;
+        --stone-600: #57534e;
+        --stone-700: #44403c;
+        --stone-800: #292524;
+        --stone-900: #1c1917;
+        --stone-950: #0c0a09;
+        --yellow: #fdf067;
+        --green: #22c55e;
+        --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+      }
+
+      html {
+        scroll-padding-bottom: 5rem;
+      }
+
       body {
         margin: 0;
-        background: #f3f4f6;
-        color: #1a1a1a;
-        font-family: system-ui, sans-serif;
+        background: var(--stone-800);
+        color: var(--stone-700);
+        font-family: 'Outfit', system-ui, sans-serif;
+        font-size: 1.125rem;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      ::selection {
+        background: var(--yellow);
+        color: var(--stone-900);
+      }
+
+      p {
+        text-wrap: pretty;
+      }
+
+      main {
+        display: grid;
+        gap: 0.5rem;
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 0.5rem;
+      }
+
+      .card {
+        padding: clamp(1.75rem, 7vw, 6rem);
+        border-radius: 1.5rem;
+      }
+
+      .light {
+        --accent: var(--stone-900);
+        --explain-abbreviation-accent: var(--stone-900);
+        --explain-abbreviation-seen-accent: var(--stone-500);
+        --explain-abbreviation-background: var(--stone-900);
+        --explain-abbreviation-color: var(--stone-50);
+        background: var(--stone-100);
+      }
+
+      .dark {
+        --accent: var(--yellow);
+        --explain-abbreviation-accent: var(--yellow);
+        --explain-abbreviation-seen-accent: var(--stone-400);
+        --explain-abbreviation-background: var(--stone-50);
+        --explain-abbreviation-color: var(--stone-900);
+        background: var(--stone-950);
+        color: var(--stone-300);
+      }
+
+      .kicker {
+        margin: 0 0 1.25rem;
+        color: var(--stone-600);
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        font-weight: 600;
+        line-height: 1.4;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .dark .kicker {
+        color: var(--stone-400);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        color: var(--stone-900);
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+        text-wrap: balance;
+      }
+
+      .dark h2 {
+        color: var(--white);
+      }
+
+      h1 {
+        font-size: clamp(3rem, 9vw, 6rem);
+      }
+
+      h2 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+      }
+
+      .soft {
+        color: var(--stone-500);
+      }
+
+      .dark .soft {
+        color: var(--stone-400);
+      }
+
+      .intro {
+        position: relative;
+        padding-top: 1.25rem;
+        isolation: isolate;
+        overflow: hidden;
+      }
+
+      .intro::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background-image: radial-gradient(circle, var(--stone-300) 1px, transparent 1.5px);
+        background-size: 14px 14px;
+        mask-image: linear-gradient(to bottom, black, transparent 70%);
+      }
+
+      .topbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: clamp(3rem, 8vw, 6rem);
+      }
+
+      .wordmark {
+        margin: 0;
+        color: var(--stone-900);
+        font-size: 1.375rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .hero {
+        display: grid;
+        gap: 2.5rem;
+        align-items: center;
+      }
+
+      .hero img {
+        order: -1;
+        width: 7rem;
+        height: auto;
+        border-radius: 1rem;
+      }
+
+      .badge {
+        display: inline-flex;
+        gap: 0.625rem;
+        align-items: center;
+        margin: 0 0 1.5rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--stone-200);
+        border-radius: 999px;
+        background: var(--white);
+        color: var(--stone-900);
+        font-family: var(--mono);
+        font-size: 0.6875rem;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .badge::after {
+        content: '';
+        width: 0.375rem;
+        height: 0.375rem;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .scribble {
+        position: relative;
+        display: inline-block;
+      }
+
+      .scribble svg {
+        position: absolute;
+        top: 100%;
+        left: -2%;
+        width: 104%;
+        height: 0.22em;
+        overflow: visible;
+        color: var(--stone-500);
+      }
+
+      .lead {
+        max-width: 36rem;
+        margin: 2rem 0 0;
+        color: var(--stone-600);
+        font-size: clamp(1.25rem, 2.2vw, 1.625rem);
+        line-height: 1.45;
+      }
+
+      .hint {
+        display: inline-block;
+        margin: 1.5rem 0 0;
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.5rem;
+        background: var(--yellow);
+        color: var(--stone-900);
+        font-size: 1rem;
+        font-weight: 600;
         line-height: 1.5;
       }
 
-      header {
+      .sample {
+        white-space: nowrap;
+        text-decoration: underline dotted var(--stone-900);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 0.25em;
+      }
+
+      .sample.seen {
+        text-decoration-style: solid;
+        text-decoration-color: var(--stone-500);
+      }
+
+      .button {
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        min-height: 2.75rem;
+        box-sizing: border-box;
+        padding: 0 1.25rem;
+        border-radius: 999px;
+        background: var(--stone-900);
+        color: var(--stone-50);
+        font-size: 0.9375rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background-color 0.2s;
+      }
+
+      .button:hover {
+        background: var(--stone-700);
+      }
+
+      .section {
+        display: grid;
+        gap: 2rem 4rem;
+      }
+
+      .content {
+        max-width: 42rem;
+      }
+
+      .content > p:first-child {
+        margin-top: 0;
+      }
+
+      .content > p:last-child {
+        margin-bottom: 0;
+      }
+
+      figure {
+        margin: 2.5rem 0;
+      }
+
+      figure img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 1rem;
+      }
+
+      figcaption {
+        margin-top: 0.75rem;
+        color: var(--stone-600);
+        font-size: 0.9375rem;
+      }
+
+      .rows {
+        margin: 0;
+        padding: 0;
+        border: 1px solid rgb(255 255 255 / 0.12);
+        border-radius: 0.75rem;
+        list-style: none;
+        counter-reset: row;
+      }
+
+      .rows li {
+        display: grid;
+        grid-template-columns: 1.5rem 1fr;
+        gap: 0.5rem 0.75rem;
+        align-items: start;
+        padding: 1.25rem 1rem;
+        border-top: 1px solid rgb(255 255 255 / 0.12);
+        counter-increment: row;
+      }
+
+      .rows li:first-child {
+        border-top: 0;
+      }
+
+      .rows li::before {
+        content: counter(row, decimal-leading-zero);
+        color: var(--stone-400);
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        line-height: 1.8rem;
+        letter-spacing: 0.1em;
+      }
+
+      .rows li > :last-child {
+        grid-column: 2;
+      }
+
+      .rows h3 {
+        margin: 0;
+        color: var(--white);
+        font-size: 1.375rem;
+        font-weight: 600;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+      }
+
+      .rows p {
+        margin: 0;
+        color: var(--stone-400);
+        font-size: 1.0625rem;
+        line-height: 1.7;
+      }
+
+      .pip {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .pip img {
+        flex: none;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px rgb(255 255 255 / 0.2);
+      }
+
+      @media (min-width: 48rem) {
+        .rows li {
+          grid-template-columns: 3rem 12rem 1fr;
+          gap: 2rem;
+          padding: 1.75rem 2rem;
+        }
+
+        .rows li > :last-child {
+          grid-column: auto;
+        }
+      }
+
+      @media (min-width: 56rem) {
+        .hero {
+          grid-template-columns: 1fr 22rem;
+          gap: 5rem;
+        }
+
+        .hero img {
+          order: 0;
+          width: 100%;
+        }
+
+        .section:not(.stacked) {
+          grid-template-columns: minmax(16rem, 1fr) 2fr;
+        }
+
+        .section:not(.stacked) > header {
+          position: sticky;
+          top: 2rem;
+          align-self: start;
+        }
+
+        .stacked {
+          gap: 3.5rem;
+        }
+      }
+
+      footer {
+        max-width: 80rem;
+        box-sizing: border-box;
+        margin: 0 auto;
+        padding: 2rem clamp(2.25rem, 7vw, 6.5rem) 7rem;
+        color: var(--stone-300);
+        font-size: 1rem;
+      }
+
+      footer p {
+        margin: 0;
+      }
+
+      code {
+        font-family: var(--mono);
+        font-size: 0.875em;
+      }
+
+      a {
+        color: inherit;
+        text-underline-offset: 0.2em;
+      }
+
+      a:focus-visible {
+        outline: 3px solid var(--accent, var(--yellow));
+        outline-offset: 3px;
+        border-radius: 2px;
+      }
+
+      .button:focus-visible {
+        border-radius: 999px;
+      }
+
+      .progress-toggle {
+        position: fixed;
+        right: 1rem;
+        bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-height: 2.75rem;
+        padding: 0.5rem 1.25rem;
+        border: 0;
+        border-radius: 999px;
+        background: var(--yellow);
+        color: var(--stone-900);
+        font: inherit;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        box-shadow: 0 10px 28px rgb(0 0 0 / 0.3);
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .progress-toggle:hover {
+        background: #f5e43a;
+      }
+
+      .progress-toggle:focus-visible {
+        outline: 3px solid var(--stone-900);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 7px var(--white);
+      }
+
+      .meter {
+        width: 2.5rem;
+        height: 0.375rem;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgb(28 25 23 / 0.2);
+      }
+
+      .meter::before {
+        content: '';
+        display: block;
+        height: 100%;
+        background: var(--stone-900);
+        transform: scaleX(var(--progress, 0));
+        transform-origin: left;
+      }
+
+      .progress {
+        position: fixed;
+        inset: auto 1rem 4.75rem auto;
+        box-sizing: border-box;
+        width: min(22rem, calc(100vw - 2rem));
+        margin: 0;
+        padding: 1.5rem;
+        border: 1px solid var(--stone-200);
+        border-radius: 1rem;
+        background: var(--stone-50);
+        color: var(--stone-900);
+        box-shadow: 0 10px 28px rgb(0 0 0 / 0.4);
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
+      .progress h2 {
+        margin: 0 0 0.375rem;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+      }
+
+      .progress p {
+        margin: 0;
+        color: var(--stone-600);
+      }
+
+      .progress ul {
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 1rem 1.5rem;
-        background: #fff;
-        border-bottom: 1px solid #d1d5db;
-      }
-
-      header strong {
-        font-size: 1.125rem;
-      }
-
-      nav ul {
-        display: flex;
-        gap: 1.5rem;
-        margin: 0;
+        gap: 0.375rem;
+        margin: 1rem 0 0;
         padding: 0;
         list-style: none;
       }
 
-      a {
-        color: #0b5cad;
-      }
-
-      main {
-        max-width: 60rem;
-        margin: 0 auto;
-        padding: 2rem 1.5rem;
-      }
-
-      .toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: end;
-        justify-content: space-between;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-      }
-
-      label {
-        display: block;
-        font-weight: 600;
-      }
-
-      input {
-        min-width: 16rem;
-        padding: 0.5rem;
-        border: 1px solid #6b7280;
-        border-radius: 0.375rem;
-        font: inherit;
-      }
-
-      button {
-        padding: 0.5rem 1rem;
-        border: 2px solid #0b5cad;
-        border-radius: 0.375rem;
-        background: #0b5cad;
-        color: #fff;
-        font: inherit;
-        font-weight: 600;
-        cursor: pointer;
-      }
-
-      button.secondary {
-        background: #fff;
-        color: #0b5cad;
-      }
-
-      button:focus-visible,
-      input:focus-visible,
-      a:focus-visible {
-        outline: 3px solid #0b5cad;
-        outline-offset: 2px;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background: #fff;
-      }
-
-      th,
-      td {
-        padding: 0.75rem 1rem;
-        border-bottom: 1px solid #e5e7eb;
-        text-align: left;
-      }
-
-      .status {
-        display: inline-block;
-        padding: 0 0.5rem;
+      .progress li {
+        padding: 0.125rem 0.625rem;
+        border: 1px solid var(--stone-200);
         border-radius: 999px;
-        background: #dcfce7;
-        color: #14532d;
+        background: var(--white);
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        font-weight: 600;
       }
 
-      .status.concept {
-        background: #fef3c7;
-        color: #78350f;
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .meter::before {
+          transition: transform 0.3s ease-out;
+        }
+      }
+
+      @media (forced-colors: active) {
+        .card,
+        .progress-toggle,
+        .progress {
+          border: 1px solid CanvasText;
+        }
+
+        .scribble svg {
+          display: none;
+        }
       }
     </style>
   </head>
   <body>
-    <header>
-      <strong>Mijn website</strong>
-      <nav id="menu" aria-label="Beheer">
-        <ul>
-          <li><a href="#" aria-current="page">Pagina's</a></li>
-          <li><a href="#">Media</a></li>
-          <li><a href="#">Instellingen</a></li>
-        </ul>
-      </nav>
-      <button type="button" class="secondary" id="start-tour">Rondleiding</button>
-    </header>
-
     <main>
-      <h1>Pagina's</h1>
-
-      <div class="toolbar">
-        <div>
-          <label for="search">Zoek een pagina</label>
-          <input type="search" id="search" />
+      <header class="card light intro">
+        <div class="topbar">
+          <p class="wordmark">Timo Smit</p>
+          <a class="button" href="#waarom">Waarom dit component <span aria-hidden="true">→</span></a>
         </div>
-        <button type="button" id="new-page">Nieuwe pagina</button>
-      </div>
+        <div class="hero">
+          <div>
+            <p class="badge">Front-end developer</p>
+            <h1>
+              Hoi, ik ben
+              <span class="scribble"
+                >Timo<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true">
+                  <path
+                    d="M3 8c40-5 95-6 150-4s100 3 144-1"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                  /></svg
+              ></span>
+            </h1>
+            <p class="lead">
+              Ik bouw websites die voor iedereen werken. Mijn vak zit vol afkortingen, en deze pagina dus ook. Klik op een onderstreepte
+              afkorting en je krijgt de uitleg.
+            </p>
+            <p class="hint">
+              Een <span class="sample">stippellijn</span> heb je nog niet bekeken, een
+              <span class="sample seen">doorgetrokken lijn</span> wel.
+            </p>
+          </div>
+          <img
+            src="assets/timo.webp"
+            width="640"
+            height="800"
+            alt="Timo, lachend in een beige colbert met stropdas."
+            fetchpriority="high"
+          />
+        </div>
+      </header>
 
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Titel</th>
-            <th scope="col">Laatst aangepast</th>
-            <th scope="col" id="status">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><a href="#">Home</a></td>
-            <td>3 november 2026</td>
-            <td><span class="status">Gepubliceerd</span></td>
-          </tr>
-          <tr>
-            <td><a href="#">Over ons</a></td>
-            <td>28 oktober 2026</td>
-            <td><span class="status">Gepubliceerd</span></td>
-          </tr>
-          <tr>
-            <td><a href="#">Vacatures</a></td>
-            <td>Vandaag</td>
-            <td><span class="status concept">Concept</span></td>
-          </tr>
-        </tbody>
-      </table>
+      <section class="card light section">
+        <header>
+          <p class="kicker">Opleiding</p>
+          <h2>Waar ik <span class="soft">vandaan kom</span></h2>
+        </header>
+        <div class="content">
+          <p>
+            Ik deed de
+            <explain-abbreviation stands-for="Hoger beroepsonderwijs" definition="Praktijkgericht onderwijs op een hogeschool."
+              >HBO</explain-abbreviation
+            >-bachelor
+            <explain-abbreviation
+              stands-for="Communication and Multimedia Design"
+              stands-for-lang="en"
+              definition="Een opleiding over ontwerpen en bouwen voor digitale media."
+              >CMD</explain-abbreviation
+            >
+            aan de <explain-abbreviation stands-for="Hogeschool van Amsterdam">HvA</explain-abbreviation>. Daar werd ik
+            <explain-abbreviation
+              stands-for="User experience"
+              stands-for-lang="en"
+              definition="Hoe het voelt om een website of app te gebruiken."
+              >UX</explain-abbreviation
+            >/<explain-abbreviation
+              stands-for="User interface"
+              stands-for-lang="en"
+              definition="Alles wat je op het scherm ziet en aanklikt."
+              >UI</explain-abbreviation
+            >-designer en front-end developer tegelijk. In juni 2023 studeerde ik af.
+          </p>
+          <p>
+            Toegankelijkheid zat er bij die opleiding vanaf het begin in. Je leerde niet eerst bouwen en daarna pas nadenken over wie het
+            gebruikt. Zo werk ik nog steeds.
+          </p>
+          <p>
+            Tijdens mijn stage bij SmartHOTEL in Reeuwijk, een bedrijf dat software voor hotels maakt, deed ik onderzoek naar gebruikers.
+            Met wat ik daar leerde, ontwierp ik in Figma een nieuwe interface voor hun digitale platforms. Die moest makkelijker in gebruik
+            zijn en het merk een frissere uitstraling geven.
+          </p>
+          <p>
+            Daarna liep ik stage bij Accent Interactive, een e-commercebureau in Alphen aan den Rijn. Daar zat ik naast de developers en
+            bouwde ik de frontend van een nieuwe versie van PlanAhead, een planningssysteem voor onder andere ProRail, in Laravel en
+            <explain-abbreviation
+              stands-for="Sassy CSS"
+              stands-for-lang="en"
+              definition="CSS met extra's zoals variabelen en nesting, die wordt omgezet naar gewone CSS."
+              >SCSS</explain-abbreviation
+            >. Zo zag ik van dichtbij hoe een ontwerp code wordt.
+          </p>
+          <p>
+            Na mijn studie ben ik blijven leren. Ik volgde cursussen over React en Angular, en over toegankelijkheid, zoals
+            <span lang="en">Introduction to Web Accessibility</span> van de
+            <explain-abbreviation
+              stands-for="Web Accessibility Initiative"
+              stands-for-lang="en"
+              definition="Het team dat de richtlijnen voor toegankelijke websites maakt, zoals de WCAG."
+              >WAI</explain-abbreviation
+            >, het toegankelijkheidsteam van het
+            <explain-abbreviation
+              stands-for="World Wide Web Consortium"
+              stands-for-lang="en"
+              definition="De organisatie die de standaarden voor het web maakt, zoals HTML en CSS."
+              >W3C</explain-abbreviation
+            >.
+          </p>
+        </div>
+      </section>
+
+      <section class="card light section">
+        <header>
+          <p class="kicker">Werk</p>
+          <h2>Wat ik heb <span class="soft">gedaan</span></h2>
+        </header>
+        <div class="content">
+          <p>
+            Bij Capgemini werkte ik een jaar als developer en consultant. Voor de Tweede Kamer koos ik bewust een project dat helemaal over
+            toegankelijkheid ging. Ik toetste de website aan de
+            <explain-abbreviation
+              stands-for="Web Content Accessibility Guidelines"
+              stands-for-lang="en"
+              definition="De internationale richtlijnen voor toegankelijke websites."
+              href="https://www.w3.org/Translations/WCAG22-nl/"
+              >WCAG</explain-abbreviation
+            >, schreef een verbeterplan en voerde dat door in React en Next.js. Voor het
+            <explain-abbreviation
+              stands-for="World Food Programme"
+              stands-for-lang="en"
+              definition="De voedselhulporganisatie van de Verenigde Naties."
+              >WFP</explain-abbreviation
+            >
+            van de <explain-abbreviation stands-for="Verenigde Naties">VN</explain-abbreviation> maakte ik een groot React-platform sneller
+            en prettiger in gebruik.
+          </p>
+
+          <figure>
+            <img
+              src="assets/wcag-presentatie.webp"
+              width="1000"
+              height="525"
+              alt="Ik presenteer vanaf mijn laptop aan drie mensen aan een vergadertafel. Op het scherm staat Web Content Accessibility Guidelines."
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>Een presentatie over de WCAG. Toegankelijkheid uitleggen vind ik net zo leuk als het bouwen.</figcaption>
+          </figure>
+
+          <p>
+            Bij <explain-abbreviation stands-for="Uw Business Online" definition="Een bureau dat websites bouwt.">UBO</explain-abbreviation>
+            Agency werkte ik aan ruim 60 websites en webapplicaties, onder andere voor Casio, Worldstream, Heinen &amp; Hopman en
+            <explain-abbreviation
+              stands-for="Nippon Telegraph and Telephone"
+              stands-for-lang="en"
+              definition="Een Japans telecombedrijf. NTT DATA is het IT-bedrijf dat eronder valt."
+              >NTT</explain-abbreviation
+            >
+            DATA. Ongeveer de helft daarvan bouwde ik zelfstandig.
+          </p>
+          <p>
+            Die websites bouwde ik met headless
+            <explain-abbreviation stands-for="WordPress" definition="Het CMS waarin klanten hun website beheren.">WP</explain-abbreviation>:
+            het beheer bleef WordPress, de voorkant was een Remix-app die de content ophaalde via een
+            <explain-abbreviation
+              stands-for="Application Programming Interface"
+              stands-for-lang="en"
+              definition="Een vaste manier waarop twee programma's gegevens uitwisselen."
+              >API</explain-abbreviation
+            >. Pagina's bestonden uit blokken die we maakten met
+            <explain-abbreviation
+              stands-for="Advanced Custom Fields"
+              stands-for-lang="en"
+              definition="Een WordPress-plugin waarmee je eigen velden en blokken toevoegt."
+              >ACF</explain-abbreviation
+            >.
+          </p>
+          <p>
+            Voor het
+            <explain-abbreviation
+              stands-for="Learning Management System"
+              stands-for-lang="en"
+              definition="Een platform waarop mensen online cursussen volgen."
+              >LMS</explain-abbreviation
+            >
+            van Casio werkte ik aan contrast en focus. Voor Brouwer Metaal bouwde ik een internationale site met
+            <explain-abbreviation stands-for="Driedimensionaal" definition="Een model dat je in de browser kunt ronddraaien."
+              >3D</explain-abbreviation
+            >-productmodellen, en voor IM Duurzaam animaties met
+            <explain-abbreviation
+              stands-for="GreenSock Animation Platform"
+              stands-for-lang="en"
+              definition="Een JavaScript-library voor animaties op websites."
+              >GSAP</explain-abbreviation
+            >.
+          </p>
+        </div>
+      </section>
+
+      <section class="card light section">
+        <header>
+          <p class="kicker">Werkwijze</p>
+          <h2>Hoe ik <span class="soft">werk</span></h2>
+        </header>
+        <div class="content">
+          <p>
+            Ik ben de schakel tussen design en development. Ik vertaal een ontwerp naar componenten in
+            <explain-abbreviation
+              stands-for="HyperText Markup Language"
+              stands-for-lang="en"
+              definition="De taal waarin je de inhoud en structuur van een webpagina schrijft."
+              >HTML</explain-abbreviation
+            >,
+            <explain-abbreviation
+              stands-for="Cascading Style Sheets"
+              stands-for-lang="en"
+              definition="De taal waarmee je bepaalt hoe een webpagina eruitziet."
+              >CSS</explain-abbreviation
+            >
+            en
+            <explain-abbreviation stands-for="TypeScript" definition="JavaScript met types, zodat je fouten ziet voordat je code draait."
+              >TS</explain-abbreviation
+            >, en ik let erop dat het ontwerp precies goed in de browser komt.
+          </p>
+          <p>
+            Toegankelijkheid neem ik vanaf het begin mee, niet als laatste laag. Bij UBO Agency zat ik tussen de developers en de designers,
+            zodat die keuzes ook echt in de code terechtkwamen. Ik test met het toetsenbord en een screenreader, en let op de focus en op
+            <explain-abbreviation
+              stands-for="Accessible Rich Internet Applications"
+              stands-for-lang="en"
+              definition="Extra attributen in HTML die een screenreader vertellen wat een element is en doet."
+              >ARIA</explain-abbreviation
+            >.
+          </p>
+          <p>
+            Bij Capgemini leerde ik werken als consultant: praten met de mensen voor wie je het bouwt, ingewikkelde eisen lezen en het werk
+            live krijgen. Voor het WFP werkte ik in een agile team, en ik ken zowel Scrum als
+            <explain-abbreviation
+              stands-for="Scaled Agile Framework"
+              stands-for-lang="en"
+              definition="Een manier om agile te werken met veel teams tegelijk aan één product."
+              >SAFe</explain-abbreviation
+            >.
+          </p>
+          <p>
+            Bij UBO Agency was ik voor klanten het aanspreekpunt van het developmentteam, en ik leverde al onze websites op. Bij elke
+            website die ik opleverde, gaf ik de klant een training in het
+            <explain-abbreviation
+              stands-for="Content Management System"
+              stands-for-lang="en"
+              definition="Het beheer waarin je zelf teksten, pagina's en afbeeldingen aanpast."
+              >CMS</explain-abbreviation
+            >. Ik legde dan uit hoe je een pagina opbouwt, waarom een afbeelding een beschrijving nodig heeft en wat een goede
+            <explain-abbreviation
+              stands-for="Search Engine Optimization"
+              stands-for-lang="en"
+              definition="Alles wat je doet om beter gevonden te worden in zoekmachines zoals Google."
+              >SEO</explain-abbreviation
+            >-titel is.
+          </p>
+          <p>
+            Voor mij is coderen een puzzel. Ik vind het mooi als alle stukjes passen, en nog mooier als er iets uitkomt waar mensen blij van
+            worden.
+          </p>
+        </div>
+      </section>
+
+      <section class="card dark section stacked">
+        <header>
+          <p class="kicker">Privé</p>
+          <h2>Buiten <span class="soft">werk</span></h2>
+        </header>
+        <ul class="rows">
+          <li>
+            <h3>Koffie</h3>
+            <p>
+              Thuis ben ik de barista, voor mezelf en voor mijn vriendin. Zij drinkt thee, dus voor haar ben ik vooral de man van de
+              waterkoker. Mijn eigen koffie krijgt meer aandacht: elke nieuwe zak bonen gaat door een complete
+              <explain-abbreviation
+                stands-for="Ontwikkeling, Test, Acceptatie, Productie"
+                definition="De stappen die software doorloopt voordat iedereen hem gebruikt."
+                >OTAP</explain-abbreviation
+              >-straat, met mezelf als tester.
+            </p>
+          </li>
+          <li>
+            <h3>Pip</h3>
+            <div class="pip">
+              <img
+                src="assets/pip.webp"
+                width="192"
+                height="192"
+                alt="Pip, een Siberische kat met een lange bruingrijze vacht en groene ogen."
+                loading="lazy"
+                decoding="async"
+              />
+              <p>Onze Siberische kat van twee jaar. Een enorme pluizebol die geen vlieg kwaad doet.</p>
+            </div>
+          </li>
+          <li>
+            <h3>Voetbal</h3>
+            <p>
+              Ik hou van voetbal. Kijken, erover praten en me samen met de rest van Nederland druk maken over de
+              <explain-abbreviation
+                stands-for="Video Assistant Referee"
+                stands-for-lang="en"
+                definition="De videoscheidsrechter, die bij twijfel de beelden terugkijkt."
+                >VAR</explain-abbreviation
+              >. Zelf heb ik zo'n 15 jaar gevoetbald, met veel liefde. Ik zie mezelf het over een tijdje wel weer oppakken.
+            </p>
+          </li>
+          <li>
+            <h3>Eten en drinken</h3>
+            <p>
+              Lekker eten, thuis of buiten de deur, en een drankje op z'n tijd. Ik probeer graag van alles, maar ga ook graag terug naar
+              plekken waarvan ik weet dat het heerlijk is. Op vrijdag het liefst op de
+              <explain-abbreviation
+                stands-for="Vrijdagmiddagborrel"
+                definition="Aan het eind van de werkweek samen iets drinken met collega's."
+                >VrijMiBo</explain-abbreviation
+              >.
+            </p>
+          </li>
+          <li>
+            <h3>Games</h3>
+            <p>
+              Ik game graag, en als front-end developer let ik dan stiekem op de
+              <explain-abbreviation
+                stands-for="Frames per second"
+                stands-for-lang="en"
+                definition="Hoe vaak het beeld per seconde ververst. Hoe hoger, hoe vloeiender het beweegt."
+                >FPS</explain-abbreviation
+              >. Grappig genoeg staat FPS in games ook voor <span lang="en">first-person shooter</span>.
+            </p>
+          </li>
+          <li>
+            <h3>Muziek</h3>
+            <p>
+              Ik ben fan van
+              <explain-abbreviation
+                stands-for="Nathan Feuerstein"
+                definition="Een Amerikaanse rapper. Zijn artiestennaam bestaat uit zijn initialen."
+                >NF</explain-abbreviation
+              >. Een artiestennaam van twee letters, dus hij past precies op deze pagina.
+            </p>
+          </li>
+          <li>
+            <h3>Verhuizen</h3>
+            <p>
+              Ik ga verhuizen naar Mijdrecht. In september 2027 krijg ik de sleutel van mijn nieuwbouwhuis. Een huis kopen blijkt ook vol
+              afkortingen te zitten, te beginnen met
+              <explain-abbreviation
+                stands-for="Vrij op naam"
+                definition="De kosten van de overdracht, zoals die van de notaris, zitten al in de koopprijs."
+                >v.o.n.</explain-abbreviation
+              >
+            </p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="card light section">
+        <header>
+          <p class="kicker">De opdracht</p>
+          <h2 id="waarom">Waarom dit <span class="soft">component</span></h2>
+        </header>
+        <div class="content">
+          <p>
+            Voor deze opdracht heb ik me natuurlijk verdiept in
+            <explain-abbreviation stands-for="Uitvoeringsinstituut Werknemersverzekeringen" href="https://www.uwv.nl/nl"
+              >UWV</explain-abbreviation
+            >. Wat me opviel: jullie houden ontzettend van afkortingen. Je leest over de
+            <explain-abbreviation
+              stands-for="Werkloosheidswet"
+              definition="Een uitkering als je werkloos wordt."
+              href="https://www.uwv.nl/nl/ww"
+              >WW</explain-abbreviation
+            >, de
+            <explain-abbreviation
+              stands-for="Wet werk en inkomen naar arbeidsvermogen"
+              definition="Een uitkering als je na twee jaar ziekte niet of minder kunt werken."
+              href="https://www.uwv.nl/nl/wia"
+              >WIA</explain-abbreviation
+            >, en binnen de WIA weer over de
+            <explain-abbreviation
+              stands-for="Werkhervatting Gedeeltelijk Arbeidsgeschikten"
+              definition="Het deel van de WIA voor mensen die nog voor een deel kunnen werken."
+              href="https://www.uwv.nl/nl/wga"
+              >WGA</explain-abbreviation
+            >
+            en de
+            <explain-abbreviation
+              stands-for="Inkomensvoorziening Volledig Arbeidsongeschikten"
+              definition="Het deel van de WIA voor mensen die niet meer kunnen werken, met weinig kans op herstel."
+              href="https://www.uwv.nl/nl/iva"
+              >IVA</explain-abbreviation
+            >.
+          </p>
+          <p>
+            Dat herkende ik, want mijn eigen werk zit er ook vol mee. Die combinatie vond ik een mooi uitgangspunt. Dit component zet de
+            uitleg bij de afkorting zelf, zodat je gewoon verder leest waar je was. En omdat het om een woord in een zin heen staat, kun je
+            het makkelijk op elke pagina gebruiken.
+          </p>
+        </div>
+      </section>
     </main>
 
-    <guided-tour>
-      <guided-tour-step heading="Welkom in het beheer">
-        In een paar stappen laat ik zien waar je alles vindt. Je kunt de rondleiding altijd sluiten met Escape.
-      </guided-tour-step>
-      <guided-tour-step target="#menu" heading="Het menu">
-        Hier wissel je tussen je pagina's, je afbeeldingen en de instellingen van je website.
-      </guided-tour-step>
-      <guided-tour-step target="#search" heading="Een pagina zoeken"
-        >Typ een deel van de titel om snel de juiste pagina te vinden.</guided-tour-step
-      >
-      <guided-tour-step target="#new-page" heading="Een nieuwe pagina">
-        Met deze knop maak je een nieuwe pagina. Die staat eerst als concept klaar, zodat je rustig kunt schrijven.
-      </guided-tour-step>
-      <guided-tour-step target="#status" heading="Concept of gepubliceerd">
-        Hier zie je of een pagina al online staat. Een concept ziet alleen jij.
-      </guided-tour-step>
-    </guided-tour>
+    <footer>
+      <p>Deze pagina is de demo van <code>&lt;explain-abbreviation&gt;</code>, een webcomponent dat ik met Stencil heb gebouwd.</p>
+    </footer>
 
-    <script>
-      const tour = document.querySelector('guided-tour')
-      document.querySelector('#start-tour').addEventListener('click', () => tour.start())
+    <button class="progress-toggle" type="button" popovertarget="progress">
+      <span>Bekeken: <span id="seen">0</span> van <span id="total">0</span></span
+      ><span class="visually-hidden"> afkortingen</span>
+      <span class="meter" aria-hidden="true"></span>
+    </button>
+
+    <section class="progress" id="progress" popover aria-labelledby="progress-title">
+      <h2 id="progress-title">Afkortingen bekeken</h2>
+      <p id="progress-text"></p>
+      <ul id="progress-list" hidden></ul>
+    </section>
+
+    <script type="module">
+      const terms = [...document.querySelectorAll('explain-abbreviation')]
+      const unique = (list) => [...new Set(list.map((term) => term.textContent.trim()))]
+      const total = unique(terms).length
+
+      function message(seen) {
+        if (seen === total) return `Je hebt alle ${total} afkortingen bekeken. Tijd voor koffie, of thee.`
+        if (seen) return `Je hebt ${seen} van de ${total} afkortingen bekeken. Dit blijft bewaard zolang je dit tabblad open hebt.`
+        return `Er staan ${total} afkortingen op deze pagina. Klik op een onderstreepte afkorting en je krijgt de uitleg.`
+      }
+
+      function count() {
+        const seen = unique(terms.filter((term) => term.seen))
+        const list = document.querySelector('#progress-list')
+
+        document.querySelector('#seen').textContent = seen.length
+        document.querySelector('.meter').style.setProperty('--progress', seen.length / total)
+        document.querySelector('#progress-text').textContent = message(seen.length)
+        list.replaceChildren(...seen.map((abbreviation) => Object.assign(document.createElement('li'), { textContent: abbreviation })))
+        list.hidden = !seen.length
+      }
+
+      document.querySelector('#total').textContent = total
+      document.addEventListener('abbreviationOpen', () => requestAnimationFrame(count))
+
+      await customElements.whenDefined('explain-abbreviation')
+      await Promise.all(terms.map((term) => term.componentOnReady()))
+      count()
     </script>
   </body>
 </html>

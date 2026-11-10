@@ -5,7 +5,6 @@ export default defineVitestConfig({
   stencilConfig: './stencil.config.ts',
   test: {
     projects: [
-      // Unit tests - stencil environment for component logic
       {
         test: {
           name: 'unit',
@@ -13,7 +12,6 @@ export default defineVitestConfig({
           environment: 'stencil'
         }
       },
-      // Component browser tests - real browser via Playwright
       {
         test: {
           name: 'browser',

@@ -1,7 +1,7 @@
 {
-  "name": "guided-tour",
+  "name": "explain-abbreviation",
   "version": "0.0.1",
-  "description": "Een toegankelijke rondleiding als webcomponent, gebouwd met Stencil",
+  "description": "Uitleg bij een afkorting, als webcomponent gebouwd met Stencil",
   "author": "Timo Smit",
   "license": "MIT",
   "main": "dist/index.cjs.js",
@@ -9,19 +9,15 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/guided-tour/guided-tour.esm.js",
+  "unpkg": "dist/explain-abbreviation/explain-abbreviation.esm.js",
   "exports": {
     ".": {
-      "import": "./dist/guided-tour/guided-tour.esm.js",
-      "require": "./dist/guided-tour/guided-tour.cjs.js"
+      "import": "./dist/explain-abbreviation/explain-abbreviation.esm.js",
+      "require": "./dist/explain-abbreviation/explain-abbreviation.cjs.js"
     },
-    "./guided-tour": {
-      "import": "./dist/components/guided-tour.js",
-      "types": "./dist/components/guided-tour.d.ts"
-    },
-    "./guided-tour-step": {
-      "import": "./dist/components/guided-tour-step.js",
-      "types": "./dist/components/guided-tour-step.d.ts"
+    "./explain-abbreviation": {
+      "import": "./dist/components/explain-abbreviation.js",
+      "types": "./dist/components/explain-abbreviation.d.ts"
     },
     "./loader": {
       "import": "./loader/index.js",
